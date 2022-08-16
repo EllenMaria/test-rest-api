@@ -6,13 +6,12 @@ import {
   deleteTatuadorD,
 } from "../dao/TatuadorDAO.js";
 
-class Tatuador {
-  constructor(id, nome, idade, email, cidade) {
+export default class TatuadorModel {
+  constructor(id, nome, telefone, email) {
     this.id = id;
     this.nome = nome;
-    this.idade = idade;
+    this.telefone = telefone;
     this.email = email;
-    this.cidade = cidade;
   }
 }
 
@@ -30,7 +29,7 @@ export const selectTatuador = async (id) => {
   try {
     const data = await findTatuadorD(id);
     if (!data) throw new Error("Não foi possível encontrar os clientes!");
-    return d;
+    return data;
   } catch (error) {
     throw error;
   }
@@ -40,7 +39,7 @@ export const insertTatuador = async (data) => {
   try {
     const d = await createTatuadorD(data);
     if (!data) throw new Error("Não foi possível inserir os dados!");
-    return data;
+    return d;
   } catch (error) {
     throw error;
   }

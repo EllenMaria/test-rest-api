@@ -1,6 +1,6 @@
 import db from "../database/dbconfig.js";
 
-const findAllAgendamentos = () => {
+const findAllAgendamentosD = () => {
   return new Promise((resolve, reject) => {
     db.all("SELECT * FROM AGENDAMENTO", (erro, rows) => {
       if (erro) {
@@ -12,16 +12,17 @@ const findAllAgendamentos = () => {
   });
 };
 
-const createAgendamento = (model) => {
+const createAgendamentoD = (model) => {
   return new Promise((resolve, reject) => {
     db.run(
-      `INSERT INTO TAREFAS(id, descricao, data, horario, tatuador_id, preco) VALUES (?,?,?,?,?,?)`,
+      `INSERT INTO TAREFAS(ID, DESCRICAO, DATA, HORARIO, TATUADOR_ID, CLIENTE_ID, PRECO) VALUES (?,?,?,?,?,?,?)`,
       [
         model.id,
         model.descricao,
         model.data,
         model.horario,
         model.tatuadorId,
+        model.clienteId,
         model.preco,
       ],
       (erro) => {
@@ -35,12 +36,12 @@ const createAgendamento = (model) => {
   });
 };
 
-const updateAgendamento = (model) => {
+const updateAgendamentoD = (model) => {
   return new Promise((resolve, reject) => {
     db.run(
       `UPDATE AGENDAMENTO 
             SET DESCRICAO = ?, DATA = ?, HORARIO = ?, PRECO = ?  
-              WHERE ID = ? AND TATUADOR_ID = ?`,
+              WHERE ID = ? AND TATUADOR_ID = ? AND CLIENTE_ID = ?`,
 
       [
         model.id,
@@ -48,6 +49,7 @@ const updateAgendamento = (model) => {
         model.data,
         model.horario,
         model.tatuadorId,
+        model.clienteId,
         model.preco,
       ],
       (erro) => {
@@ -61,7 +63,7 @@ const updateAgendamento = (model) => {
   });
 };
 
-const findAgendamento = (id) => {
+const findAgendamentoD = (id) => {
   return new Promise((resolve, reject) => {
     db.all(`SELECT * FROM AGENDAMENTO WHERE ID = ?`, id, (erro, rows) => {
       if (erro) {
@@ -73,7 +75,7 @@ const findAgendamento = (id) => {
   });
 };
 
-const deleteAgendamento = (id) => {
+const deleteAgendamentoD = (id) => {
   return new Promise((resolve, reject) => {
     db.run(`DELETE FROM AGENDAMENTO WHERE ID = ?`, id, (erro) => {
       if (erro) {
@@ -86,9 +88,9 @@ const deleteAgendamento = (id) => {
 };
 
 export {
-  findAllAgendamentos,
-  createAgendamento,
-  findAgendamento,
-  updateAgendamento,
-  deleteAgendamento,
+  findAllAgendamentosD,
+  createAgendamentoD,
+  findAgendamentoD,
+  updateAgendamentoD,
+  deleteAgendamentoD,
 };

@@ -3,8 +3,7 @@ import db from "../database/dbconfig.js";
 const createTatuadorD = (data) => {
   return new Promise((resolve, reject) => {
     db.run(
-      `INSERT INTO TATUADOR(ID, NOME, TELEFONE, EMAIL)
-              VALUES (?,?,?,?)`,
+      `INSERT INTO TATUADOR(ID, NOME, TELEFONE, EMAIL) VALUES (?,?,?,?)`,
       [data.ID, data.NOME, data.TELEFONE, data.EMAIL],
       (erro) => {
         if (erro) {
@@ -29,7 +28,7 @@ const findAllTatuadoresD = () => {
   });
 };
 
-const findTatuadorD = () => {
+const findTatuadorD = (id) => {
   return new Promise((resolve, reject) => {
     db.all(`SELECT * FROM TATUADOR WHERE ID = ?`, id, (erro, rows) => {
       if (erro) {
@@ -44,15 +43,13 @@ const findTatuadorD = () => {
 const updateTatuadorD = (data) => {
   return new Promise((resolve, reject) => {
     db.run(
-      `UPDATE TATUADOR 
-              SET NOME = ?, TELEFONE = ?, EMAIL = ?, 
-                WHERE ID = ?`,
-      [data.ID, data.NOME, data.TELEFONE, data.EMAIL],
+      `UPDATE TATUADOR SET NOME = ?, TELEFONE = ?, EMAIL = ? WHERE ID = ?`,
+      [data.id, data.NOME, data.TELEFONE, data.EMAIL],
       (erro, rows) => {
         if (erro) {
           reject(erro.message);
         } else {
-          resolve(data);
+          resolve(rows);
         }
       }
     );
