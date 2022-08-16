@@ -12,51 +12,48 @@ const findAllAgendamentosD = () => {
   });
 };
 
-const createAgendamentoD = (model) => {
+const createAgendamentoD = (data) => {
   return new Promise((resolve, reject) => {
     db.run(
-      `INSERT INTO TAREFAS(ID, DESCRICAO, DATA, HORARIO, TATUADOR_ID, CLIENTE_ID, PRECO) VALUES (?,?,?,?,?,?,?)`,
+      `INSERT INTO AGENDAMENTO(ID, DESCRICAO, DATA, HORARIO, TATUADOR_ID, CLIENTE_ID, PRECO) VALUES (?,?,?,?,?,?,?)`,
       [
-        model.id,
-        model.descricao,
-        model.data,
-        model.horario,
-        model.tatuadorId,
-        model.clienteId,
-        model.preco,
+        data.id,
+        data.descricao,
+        data.data,
+        data.horario,
+        data.tatuadorId,
+        data.clienteId,
+        data.preco,
       ],
       (erro) => {
         if (erro) {
           reject(erro.message);
         } else {
-          resolve(model);
+          resolve(data);
         }
       }
     );
   });
 };
 
-const updateAgendamentoD = (model) => {
+const updateAgendamentoD = (data) => {
   return new Promise((resolve, reject) => {
     db.run(
-      `UPDATE AGENDAMENTO 
-            SET DESCRICAO = ?, DATA = ?, HORARIO = ?, PRECO = ?  
-              WHERE ID = ? AND TATUADOR_ID = ? AND CLIENTE_ID = ?`,
-
+      `UPDATE AGENDAMENTO SET DESCRICAO = ?, DATA = ?, HORARIO = ?, TATUADOR_ID = ?, CLIENTE_ID = ?, PRECO = ? WHERE ID = ?`,
       [
-        model.id,
-        model.descricao,
-        model.data,
-        model.horario,
-        model.tatuadorId,
-        model.clienteId,
-        model.preco,
+        data.descricao,
+        data.data,
+        data.horario,
+        data.tatuadorId,
+        data.clienteId,
+        data.preco,
+        data.id,
       ],
       (erro) => {
         if (erro) {
           reject(erro.message);
         } else {
-          resolve(model);
+          resolve(data);
         }
       }
     );

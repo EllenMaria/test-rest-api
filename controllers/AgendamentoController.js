@@ -1,5 +1,7 @@
 import AgendamentoModel from "../models/AgendamentoModel.js";
 
+import { selectTatuador } from "../models/TatuadorModel.js";
+
 import {
   findAllAgendamentosD,
   createAgendamentoD,
@@ -17,20 +19,27 @@ import {
 // } from "../dao/TatuadorDAO.js";
 
 const createAgendamento = async (req, res) => {
-  const { descricao, data, horario, tatuador_id, cliente_id, preco } = req.body;
-
-  const dataMolded = new AgendamentoModel(
-    descricao,
-    data,
-    horario,
-    tatuador_id,
-    cliente_id,
-    preco
-  );
+  const { descricao, data, horario, tatuadorId, clienteId, preco } = req.body;
+  const { id } = req.params;
 
   try {
-    const Agendamentos = await createAgendamentoD(dataMolded);
-    res.status(201).json({ Agendamentos });
+    let tatuador = await selectTatuador(id);
+
+    if (!tatuador) {
+      return res.json({ message: "Tatuador inexistente!" });
+    }
+
+    const Agendamentos = await createAgendamentoD({
+      descricao: descricao,
+      data: data,
+      horario: horario,
+      tatuadorId: id,
+      clienteId: clienteId,
+      preco: preco,
+    });
+    res.status(201).json({
+      Agendamentos,
+    });
   } catch (error) {
     res.status(400).json({
       message: error.message,
@@ -65,27 +74,31 @@ const findAgendamento = async (req, res) => {
 };
 
 const updateAgendamento = async (req, res) => {
-  const { descricao, data, horario, tatuador_id, cliente_id, preco } = req.body;
   const { id } = req.params;
+  const { descricao, data, horario, tatuadorId, clienteId, preco } = req.body;
 
   // const { id } = req.params;
   try {
-    const oldAgendamento = await updateAgendamentoD(id);
-    const dataMolded = new AgendamentoModel(
+    const oldAgendamento = await findAgendamentoD(id);
+
+    const dataAgendamento = new AgendamentoModel(
       id,
       descricao || oldAgendamento[0].DESCRICAO,
       data || oldAgendamento[0].DATA,
       horario || oldAgendamento[0].HORARIO,
-      tatuador_id || oldAgendamento[0].TATUADOR_ID,
-      cliente_id || oldAgendamento[0].CLIENTE_ID,
+      tatuadorId || oldAgendamento[0].TATUADOR_ID,
+      clienteId || oldAgendamento[0].CLIENTE_ID,
       preco || oldAgendamento[0].PRECO
     );
 
-    const data = await upTatuador(dataMolded);
-    res.status(201).json({ results: data, error: false });
+    console.log(oldAgendamento);
+    console.log(dataAgendamento);
+
+    const Agendamentos = await updateAgendamentoD(dataAgendamento);
+    res.status(201).json({ Agendamentos });
   } catch (error) {
     res.status(400).json({
-      msg: error.message,
+      message: error.message,
       erro: "true",
     });
   }
