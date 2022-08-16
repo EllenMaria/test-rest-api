@@ -43,18 +43,35 @@ const findTatuadorD = (id) => {
 const updateTatuadorD = (data) => {
   return new Promise((resolve, reject) => {
     db.run(
-      `UPDATE TATUADOR SET NOME = ?, TELEFONE = ?, EMAIL = ? WHERE ID = ?`,
-      [data.id, data.NOME, data.TELEFONE, data.EMAIL],
-      (erro, rows) => {
+      `UPDATE TATUADOR 
+            SET NOME = ?, TELEFONE = ?, EMAIL = ? 
+              WHERE ID = ?`,
+      [data.nome, data.telefone, data.email, data.id],
+      (erro) => {
         if (erro) {
           reject(erro.message);
         } else {
-          resolve(rows);
+          resolve(data);
         }
       }
     );
   });
 };
+
+//   const query =
+//     "UPDATE TATUADOR SET NOME = ?, TELEFONE = ?, EMAIL = ? WHERE ID = ?"[
+//       (data.NOME, data.TELEFONE, data.EMAIL, data.ID)
+//     ];
+//   return new Promise((resolve, reject) => {
+//     db.run(query, (error, rows) => {
+//       if (error) {
+//         reject(error);
+//       } else {
+//         resolve(rows);
+//       }
+//     });
+//   });
+// };
 
 const deleteTatuadorD = (id) => {
   return new Promise((resolve, reject) => {

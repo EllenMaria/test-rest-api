@@ -42,23 +42,28 @@ const findTatuador = async (req, res) => {
 };
 
 const updateTatuador = async (req, res) => {
+  // const id = req.params.id;
+  const { id } = req.params;
   const { nome, telefone, email } = req.body;
 
-  // const { id } = req.params;
-  // const oldTatuador = await upTatuador(id);
-  // const dataMolded = new TatuadorModel(
-  //   id,
-  //   nome || oldTatuador[0].NOME,
-  //   email || oldUser[0].TELEFONE,
-  //   senha || oldUser[0].EMAIL
-  // );
-  const { id } = req.params.id;
   try {
-    const data = await upTatuador(req.body);
-    res.status(201).json({ results: data, error: false });
+    const oldTatuador = await selectTatuador(id);
+
+    const data = new TatuadorModel(
+      id,
+      nome || oldTatuador[0].NOME,
+      telefone || oldTatuador[0].TELEFONE,
+      email || oldTatuador[0].EMAIL
+    );
+
+    console.log(oldTatuador);
+    console.log(data);
+
+    const Tatuadores = await upTatuador(data);
+    res.status(200).json({ Tatuadores });
   } catch (error) {
     res.status(400).json({
-      msg: error.message,
+      message: error.message,
       erro: "true",
     });
   }
@@ -78,8 +83,7 @@ const deleteTatuador = async (req, res) => {
 
 const createTatuador = async (req, res) => {
   const { nome, telefone, email } = req.body;
-  // console.log(dataMolded);
-  // const data = req.params.data;
+
   try {
     const Tatuadores = await insertTatuador(req.body);
     res.status(201).json({ Tatuadores });
